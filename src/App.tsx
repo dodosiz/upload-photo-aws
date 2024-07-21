@@ -1,3 +1,4 @@
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import {
   FileUpload,
   FileUploadHandlerEvent,
@@ -6,6 +7,7 @@ import {
 import { Message } from "primereact/message";
 import { ProgressBar } from "primereact/progressbar";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 type Status = "initial" | "uploading";
 
@@ -14,6 +16,14 @@ interface MessageProps {
   text: string;
 }
 
+const client = new S3Client({
+  region: import.meta.env.VITE_REGION,
+  credentials: {
+    accessKeyId: import.meta.env.VITE_ACCESS_KEY,
+    secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
+  },
+});
+
 export function Upload() {
   const [status, setStatus] = useState<Status>("initial");
   const [progress, setProgress] = useState(0);
@@ -21,8 +31,13 @@ export function Upload() {
   const handleUpload = async (event: FileUploadHandlerEvent) => {
     setStatus("uploading");
     const step = 100 / event.files.length;
-    for (let i = 0; i < event.files.length; i++) {
-      await sleep(1500);
+    for (const file of event.files) {
+      const command = new PutObjectCommand({
+        Bucket: import.meta.env.VITE_BUCKET_NAME,
+        Key: `${uuidv4()}.${file.name}`,
+        Body: file,
+      });
+      client.send(command);
       setProgress((p) => p + Math.floor(step));
     }
     setProgress(100);
