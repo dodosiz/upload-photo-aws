@@ -1,13 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Upload } from "./App.tsx";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import "./index.css";
+import { App } from "./App.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <PrimeReactProvider>
-      <Upload />
+      <App />
     </PrimeReactProvider>
   </React.StrictMode>
 );

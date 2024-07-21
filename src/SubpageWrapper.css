@@ -1,0 +1,11 @@
+.goBack {
+  width: 100vw;
+  height: 40px;
+  border-bottom: 1px solid;
+  position: fixed;
+  top: 0;
+}
+
+.subPage {
+  padding-top: 40px;
+}
