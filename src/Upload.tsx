@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import {
   FileUpload,
   FileUploadHandlerEvent,
@@ -8,6 +8,7 @@ import { Message } from "primereact/message";
 import { ProgressBar } from "primereact/progressbar";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { client } from "./s3-client";
 
 type Status = "initial" | "uploading";
 
@@ -15,14 +16,6 @@ interface MessageProps {
   severity: "success" | "error";
   text: string;
 }
-
-const client = new S3Client({
-  region: import.meta.env.VITE_REGION,
-  credentials: {
-    accessKeyId: import.meta.env.VITE_ACCESS_KEY,
-    secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
-  },
-});
 
 export function Upload() {
   const [status, setStatus] = useState<Status>("initial");
