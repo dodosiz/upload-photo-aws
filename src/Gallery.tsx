@@ -1,29 +1,29 @@
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { client } from "./s3-client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./Gallery.css";
 import { Image } from "primereact/image";
 
 export function Gallery() {
   const [imageKeys, setImageKeys] = useState<string[]>([]);
 
-  const loadPhotos = async () => {
+  const loadPhotos = useCallback(async () => {
     const listObjectsCommand = new ListObjectsV2Command({
       Bucket: import.meta.env.VITE_BUCKET_NAME,
     });
     const { Contents } = await client.send(listObjectsCommand);
     if (Contents) {
       Contents.map(async (c) => {
-        if (c.Key) {
+        if (c.Key && imageKeys.indexOf(c.Key) === -1) {
           setImageKeys([...imageKeys, c.Key]);
         }
       });
     }
-  };
+  }, [imageKeys]);
 
   useEffect(() => {
     loadPhotos();
-  }, []);
+  }, [loadPhotos]);
 
   return (
     <>
