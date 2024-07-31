@@ -1,3 +1,7 @@
 body {
   color: #06b6d4;
 }
+
+img {
+  pointer-events: none;
+}

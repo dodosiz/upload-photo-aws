@@ -60,7 +60,6 @@ export function Gallery() {
             key={key}
             src={`https://s3-${import.meta.env.VITE_REGION}.amazonaws.com/${import.meta.env.VITE_BUCKET_NAME}/${key}`}
             width="250"
-            preview
             className="galleryImage"
           />
         ))}
